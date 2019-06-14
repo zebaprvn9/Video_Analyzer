@@ -12,9 +12,8 @@ export class ObjectDetection extends React.Component {
     }
 
     render() {
-        console.log(this.props.objectDetectedResponse);
+        //console.log(this.props.objectDetectedResponse);
         const columns = [
-            {field: 'id', header: 'Id'},
             {field: 'name', header: 'Name'},
             {field: 'confidence', header: 'Confidence'},
             {field: 'timestamp', header: 'Timestamp'}
@@ -28,7 +27,7 @@ export class ObjectDetection extends React.Component {
             <div>
                 <h3>Object Detection</h3>
                 <DataTable value={this.props.objectDetectedResponse}
-                paginator={true} rows={5} first={this.state.first} 
+                paginator={true} rows={20} first={this.state.first} 
                 onPage={(e) => this.setState({first: e.first})}
                 >
                     {dynamicColumns}

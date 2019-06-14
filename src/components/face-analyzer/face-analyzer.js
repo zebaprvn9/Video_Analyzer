@@ -10,7 +10,7 @@ export class FaceAnalyzer extends React.Component {
     }
 
     render() {
-        console.log("hi",this.props.faceAnalyzerResponse);
+        //console.log("hi",this.props.faceAnalyzerResponse);
        
 
         return(
@@ -33,8 +33,8 @@ export class FaceAnalyzer extends React.Component {
                     <Column style={{width: '5%'}} key={9} field="EyesOpen" header="Eyes Open" body={data => `${data.EyesOpen.Value}`}/>
                     <Column style={{width: '6%'}} key={10} field="MouthOpen" header="Mouth Open" body={data => `${data.MouthOpen.Value}`}/>
                     <Column style={{width: '10%'}} key={11} field="Emotions" header="Emotions" body={data => `${ data.Emotions.sort((x,y)=>x.Confidence < y.Confidence)[0].Type}`}/>
-                    <Column style={{width: '15%'}} key={12} field="Quality" header="Quality" body={data => `Brightness=${data.Quality.Brightness}, Sharpness=${data.Quality.Sharpness}`}/>
-                    <Column style={{width: '20%'}} key={13} field="Pose" header="Pose" body={data => `Roll=${data.Pose.Roll}, Yaw=${data.Pose.Yaw}, Pitch=${data.Pose.Pitch}`}/>
+                    <Column style={{width: '15%'}} key={13} field="Quality" header="Quality" body={data => `Brightness= ${data.Quality.Brightness}, Sharpness= ${data.Quality.Sharpness}`}/>
+                    <Column style={{width: '20%'}} key={12} field="Pose" header="Pose" body={data => `Roll=${data.Pose.Roll}, Yaw=${data.Pose.Yaw}, Pitch=${data.Pose.Pitch}`}/>
                     <Column style={{width: '6%'}} key={14} field="timestamp" header="Time Stamp" />
                 </DataTable>
             </div>
