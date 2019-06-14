@@ -33,6 +33,7 @@ export class UploadVideo extends React.Component {
     onBeforeUpload(event) {
         //console.log("onBeforeUpload", event);
         this.setState({uploadMessage : "Uploading..."});
+        
     }
 
     onSelect(event) {
@@ -81,10 +82,34 @@ export class UploadVideo extends React.Component {
     }
 
     onUpload(event) {
+        console.log(event, event.xhr, event.xhr.response, "onUpload");
+        // event.xhr.onreadystatechange = (l,m,n) => {
+        //     console.log("event.xhr", l,m,n);
+        // }
+       // console.log(event, event.xhr.responseText(), "onUpload");
+       let fileName = null;
+       if( event.xhr && event.xhr.response) {
+        fileName = JSON.parse(event.xhr.response)[0].file;
+       }
         console.log("onUpload");
-        this.setState({uploadMessage: 'Analysing Object...'});
-        //this.growl.show({severity: 'info', summary: 'Object Detecting...', detail: 'File Uploaded'})
-        return fetch("http://54.210.242.45:5000/extract-labels?file=Leave__Airbnb.mp4")
+        this.setState({uploadMessage: 'Uploading...'});
+        /*return fetch('http://54.210.242.45:5000/analyse-video', {
+            method: 'POST', // *GET, POST, PUT, DELETE, etc.
+            mode: 'cors', // no-cors, cors, *same-origin
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: 'same-origin', // include, *same-origin, omit
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            }
+        })
+        .then(response => response.json()).then(json => {
+            console.log("json", json);
+            fileName = json[0].file;
+            this.setState({
+                uploadMessage: 'Analysing Object...',
+            });*/
+        return fetch(`http://54.210.242.45:5000/extract-labels?file=${fileName}`)
         .then(response => response.json())
         .then(responseJson => {
             //console.log("myJson", responseJson);
@@ -92,11 +117,16 @@ export class UploadVideo extends React.Component {
                 uploadMessage: 'Detecting Faces...',
                 wordTag: this.getWordTagData(responseJson[0]['object-detected']['labels'])
             });
-            return fetch("http://54.210.242.45:5000/extract-face-analysis?file=Leave__Airbnb.mp4");
-        }).then(response => response.json())
+            return fetch(`http://54.210.242.45:5000/extract-face-analysis?file=${fileName}`);
+        })
+        .then(response => response.json())
         .then(responseJson => {
             let { wordTag = [] } = this.state;
-            this.setState({faceAnalyzer: responseJson, uploadMessage: null, wordTag: wordTag.concat(this.getFaceAnalayzerWordTag(responseJson[0]['face-analysis']['labels']))});
+            console.log("ww", wordTag);
+            this.setState({faceAnalyzer: responseJson, 
+                uploadMessage: null, 
+                wordTag: wordTag.concat(this.getFaceAnalayzerWordTag(responseJson[0]['face-analysis']['labels']))});
+            console.log(wordTag);
         });
     }
 
@@ -116,14 +146,14 @@ export class UploadVideo extends React.Component {
                 </div>
                 <div className="content-section implementation">
                     <FileUpload 
-                        name="demo[]" url="https://www.mocky.io/v2/5185415ba171ea3a00704eed" 
+                        name="file" url="http://54.210.242.45:5000/analyse-video" 
                         onUpload={this.onUpload} 
                         //onSelect={this.onSelect}
                         onBeforeUpload={this.onBeforeUpload}
                         onBeforeSend={this.onBeforeSend}
                         onError={this.onError}
-                        accept="image/*" 
-                        maxFileSize={1000000}
+                        accept="file/*" 
+                        maxFileSize={10000000}
                         onProgress={this.monitorProgress} />
                     <Growl ref={(el) => { this.growl = el; }}></Growl>
                     <span>{this.state.uploadMessage}</span>
