@@ -92,7 +92,7 @@ export class UploadVideo extends React.Component {
         fileName = JSON.parse(event.xhr.response)[0].file;
        }
         console.log("onUpload");
-        this.setState({uploadMessage: 'Uploading...'});
+        this.setState({uploadMessage: 'Analysing Object...'});
         /*return fetch('http://54.210.242.45:5000/analyse-video', {
             method: 'POST', // *GET, POST, PUT, DELETE, etc.
             mode: 'cors', // no-cors, cors, *same-origin
@@ -126,7 +126,7 @@ export class UploadVideo extends React.Component {
             this.setState({faceAnalyzer: responseJson, 
                 uploadMessage: null, 
                 wordTag: wordTag.concat(this.getFaceAnalayzerWordTag(responseJson[0]['face-analysis']['labels']))});
-            console.log(wordTag);
+            console.log(this.state.wordTag);
         });
     }
 
